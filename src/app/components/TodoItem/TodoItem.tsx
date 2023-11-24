@@ -1,26 +1,20 @@
 import { FaTrash } from 'react-icons/fa'
-import { ChangeEvent, MouseEvent } from 'react'
-// import updateTodo from "@/lib/updateTodo"
-// import deleteTodo from "@/lib/deleteTodo"
+import { MouseEvent } from 'react'
 import type { Todo } from '@/types/Todo'
 
 type Props = {
   todo: Todo
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  toggleTodo: (id: number) => void
+  deleteTodo: (id: number) => void
 }
 
-export default function TodoItem({ todo, setTodos }: Props) {
+export default function TodoItem({ todo, toggleTodo, deleteTodo }: Props) {
   const handleChange = async () => {
-    //const updatedTodo = await updateTodo(todo)
-    setTodos((prevTodos) => [
-      ...prevTodos.filter((prevTodo) => prevTodo.id !== todo.id),
-      { ...todo, completed: !todo.completed },
-    ])
+    toggleTodo(todo.id)
   }
 
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
-    //await deleteTodo(todo)
-    setTodos((prev) => [...prev.filter((td) => td.id !== todo.id)])
+    deleteTodo(todo.id)
   }
 
   return (

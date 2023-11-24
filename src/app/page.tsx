@@ -1,43 +1,55 @@
-"use client"
+'use client'
 
-import TodoList from "./components/TodoList/TodoList"
-import AddTodo from "./components/AddTodo/AddTodo"
-import { useState } from "react"
-import type { Todo } from "@/types/Todo"
-
+import TodoList from './components/TodoList/TodoList'
+import AddTodo from './components/AddTodo/AddTodo'
+import { useState } from 'react'
+import type { Todo } from '@/types/Todo'
+import { initTodos } from '@/data/constants'
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([
-    {
-      "userId": 1,
-      "title": "Wave hello! 👋",
-      "completed": false,
-      "id": 1
-    },
-    {
-      "userId": 1,
-      "title": "Get Coffee ☕☕☕",
-      "completed": false,
-      "id": 2
-    },
-    {
-      "userId": 1,
-      "title": "Go to Work ⚒",
-      "completed": false,
-      "id": 3
-    },
-    {
-      "userId": 1,
-      "title": "Write Code 💻",
-      "completed": false,
-      "id": 4,
+  const [todos, setTodos] = useState<Todo[]>(initTodos)
+
+  const addTodo = (title: string) => {
+    const highestId = Math.max(...todos.map((todo) => todo.id))
+
+    const newTodo = {
+      userId: 1,
+      title: title,
+      completed: false,
+      id: highestId + 1,
     }
-  ])
+
+    const updatedTodos = [...todos, newTodo]
+
+    setTodos(updatedTodos)
+  }
+
+  const deleteTodo = (id: number) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id)
+
+    setTodos(updatedTodos)
+  }
+
+  const toggleTodo = (id: number) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed }
+      } else {
+        return todo
+      }
+    })
+
+    setTodos(updatedTodos)
+  }
 
   return (
     <>
-      <AddTodo setTodos={setTodos} />
-      <TodoList todos={todos} setTodos={setTodos} />
+      <AddTodo addTodo={addTodo} />
+      <TodoList
+        todos={todos}
+        toggleTodo={toggleTodo}
+        deleteTodo={deleteTodo}
+      />
     </>
   )
 }

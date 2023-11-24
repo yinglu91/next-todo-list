@@ -2,10 +2,10 @@ import { useState, FormEvent } from 'react'
 import type { Todo } from '@/types/Todo'
 
 type Props = {
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  addTodo: (title: string) => void
 }
 
-export default function AddItemForm({ setTodos }: Props) {
+export default function AddItemForm({ addTodo }: Props) {
   const [item, setItem] = useState('')
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -13,14 +13,7 @@ export default function AddItemForm({ setTodos }: Props) {
 
     if (!item) return
 
-    setTodos((prev) => {
-      const highestId = [...prev].sort((a, b) => b.id - a.id)[0].id
-
-      return [
-        ...prev,
-        { userId: 1, title: item, completed: false, id: highestId + 1 },
-      ]
-    })
+    addTodo(item)
 
     setItem('')
   }

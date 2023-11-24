@@ -3,10 +3,11 @@ import type { Todo } from '@/types/Todo'
 
 type Props = {
   todos: Todo[]
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  toggleTodo: (id: number) => void
+  deleteTodo: (id: number) => void
 }
 
-export default function TodoList({ todos, setTodos }: Props) {
+export default function TodoList({ todos, toggleTodo, deleteTodo }: Props) {
   let content
   if (todos.length === 0) {
     content = <p>No Todos Available</p>
@@ -19,7 +20,8 @@ export default function TodoList({ todos, setTodos }: Props) {
           <TodoItem
             key={todo.id}
             todo={todo}
-            setTodos={setTodos}
+            toggleTodo={toggleTodo}
+            deleteTodo={deleteTodo}
           />
         ))}
       </>
