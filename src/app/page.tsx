@@ -45,6 +45,7 @@ export default function Home() {
   return (
     <>
       <AddTodo addTodo={addTodo} />
+
       <TodoList
         todos={todos}
         toggleTodo={toggleTodo}
