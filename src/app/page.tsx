@@ -13,7 +13,6 @@ export default function Home() {
     const highestId = Math.max(...todos.map((todo) => todo.id))
 
     const newTodo = {
-      userId: 1,
       title: title,
       completed: false,
       id: highestId + 1,
