@@ -1,0 +1,29 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Wave hello! 👋",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "Get Coffee ☕☕☕",
+      "completed": false
+    },
+    {
+      "title": "Go to Work ⚒",
+      "completed": false,
+      "id": 3
+    },
+    {
+      "id": 4,
+      "title": "Write Code 💻",
+      "completed": false
+    },
+    {
+      "title": "test123",
+      "completed": false,
+      "id": 5
+    }
+  ]
+}

@@ -2,38 +2,73 @@
 
 import TodoList from './components/TodoList/TodoList'
 import AddTodo from './components/AddTodo/AddTodo'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Todo } from '@/types/Todo'
-import { initTodos } from '@/data/constants'
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>(initTodos)
+  const [todos, setTodos] = useState<Todo[]>([])
+  console.log(todos)
 
-  const addTodo = (title: string) => {
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const respone = await fetch('http://localhost:3004/todos')
+      const result = (await respone.json()) as Todo[]
+
+      setTodos(result)
+    }
+
+    fetchTodos()
+  }, [])
+
+  const addTodo = async (title: string) => {
     const highestId = Math.max(...todos.map((todo) => todo.id))
 
     const newTodo = {
-      userId: 1,
       title: title,
       completed: false,
       id: highestId + 1,
     }
+
+    await fetch('http://localhost:3004/todos', {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTodo), // body data type must match "Content-Type" header
+    })
 
     const updatedTodos = [...todos, newTodo]
 
     setTodos(updatedTodos)
   }
 
-  const deleteTodo = (id: number) => {
+  const deleteTodo = async (id: number) => {
+    await fetch(`http://localhost:3004/todos/${id}`, {
+      method: 'DELETE',
+    })
+    console.log('deleted id=', id)
+
     const updatedTodos = todos.filter((todo) => todo.id !== id)
 
     setTodos(updatedTodos)
   }
 
-  const toggleTodo = (id: number) => {
+  const toggleTodoCompleted = async (id: number) => {
+    const foundTodo = todos.find((todo) => todo.id === id) as Todo
+    const updatedTodo = { ...foundTodo, completed: !foundTodo.completed }
+
+    await fetch(`http://localhost:3004/todos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedTodo), // body data type must match "Content-Type" header
+    })
+    console.log('updated id=', id)
+
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        return { ...todo, completed: !todo.completed }
+        return updatedTodo
       } else {
         return todo
       }
@@ -48,7 +83,7 @@ export default function Home() {
 
       <TodoList
         todos={todos}
-        toggleTodo={toggleTodo}
+        toggleTodo={toggleTodoCompleted}
         deleteTodo={deleteTodo}
       />
     </>
